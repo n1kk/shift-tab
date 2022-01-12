@@ -1,0 +1,38 @@
+{
+  "name": "shift-tab",
+  "version": "1.0.0",
+  "description": "Removes leading space from string template literals",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "repository": "github:n1kk/shift-tab",
+  "homepage": "https://github.com/n1kk/shift-tab",
+  "type": "module",
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts"
+  ],
+  "scripts": {
+    "build": "pnpm tsc -b ./tsconfig.json",
+    "test": "pnpm jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.0",
+    "jest": "^27.4.7",
+    "prettier": "^2.5.1",
+    "ts-jest": "^27.1.2",
+    "typescript": "^4.5.4"
+  },
+  "author": "n1kk",
+  "license": "MIT",
+  "keywords": [
+    "unindent",
+    "unindent code",
+    "trim line",
+    "trim block",
+    "trim whitespace",
+    "untab",
+    "untab code",
+    "shift tab",
+    "shift tab code"
+  ]
+}
