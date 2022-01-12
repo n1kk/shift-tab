@@ -67,9 +67,9 @@ Content of `someCode` now is (empty line included):
 `;
 ```
 
-New lines are preserved by default, but can be [configured](#configuration-options).
+Default behavior: unindent lines by the first indented line found, leave leading and trailing lines, trim trailing whitespace on every line.
 
-Calling it as a function and passing configurations object creates a new tag:
+Calling it as a function and passing [configurations object](#configuration-options) creates a new tag:
 
 ```ts
 const trim = shiftTab({ trim: true });
