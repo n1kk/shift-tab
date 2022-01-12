@@ -13,13 +13,13 @@ Features:
 
 - [shift-tab](#shift-tab)
   - [Import](#import)
+  - [Aliases](#all-exported-aliases)
   - [Usage](#usage)
     - [Whitespace](#whitespace)
 - [API and Configuration](#api-and-configuration)
   - [Template tag signature](#template-tag-signature)
   - [Tag factory signature](#tag-factory-signature)
   - [Options](#options)
-  - [Exported aliases](#exported-aliases)
 
 ### Import:
 
@@ -29,7 +29,18 @@ import shiftTab from "shift-tab";
 import { $t } from "shift-tab";
 ```
 
-See the list of all [exported aliases](#exported-aliases).
+#### all exported aliases:
+
+```ts
+export const $t = shiftTab;
+export const $tm = shiftTab({ indent: "smallest" });
+export const $tt = shiftTab({ trim: true });
+export const $ttm = shiftTab({ trim: true, indent: "smallest" });
+export const $tp = shiftTab({ pad: true });
+export const $tpm = shiftTab({ pad: true, indent: "smallest" });
+export const $ttp = shiftTab({ pad: true, trim: true });
+export const $ttpm = shiftTab({ pad: true, trim: true, indent: "smallest" });
+```
 
 ### Usage:
 
@@ -82,11 +93,11 @@ Content of `someCode` now is:
 </p>`;
 ```
 
-See the list of all [exported aliases](#exported-aliases).
+See the list of all [exported aliases](#all-exported-aliases).
 
 #### Whitespace
 
-It works with both `tabs` abd `spaces`. The first indent character that is encountered become the indentation character, so be sure not to mix both.
+It works with both `tabs` and `spaces`. The first indent character that is encountered will become the indentation character, so be sure not to mix both.
 
 ## API and Configuration
 
@@ -155,16 +166,3 @@ type Options = {
 - `trim`: How to treat empty leading and trailing empty lines
   - `true`: remove
   - `false`: leave
-
-### Exported aliases
-
-```ts
-const $t = shiftTab;
-const $tm = shiftTab({ indent: "smallest" });
-const $tt = shiftTab({ trim: true });
-const $ttm = shiftTab({ trim: true, indent: "smallest" });
-const $tp = shiftTab({ pad: true });
-const $tpm = shiftTab({ pad: true, indent: "smallest" });
-const $ttp = shiftTab({ pad: true, trim: true });
-const $ttpm = shiftTab({ pad: true, trim: true, indent: "smallest" });
-```
