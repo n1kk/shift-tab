@@ -56,7 +56,7 @@ Content of `someCode` now is (empty line included):
 `;
 ```
 
-New lines are preserved by default, but can be configured.
+New lines are preserved by default, but can be [configured](#options).
 
 Calling it as a function and passing configurations object creates a new tag:
 
@@ -81,6 +81,8 @@ Content of `someCode` now is:
     Lorem ipsum <img src="./img.jpg"/>
 </p>`;
 ```
+
+See the list of all [exported aliases](#exported-aliases).
 
 #### Whitespace
 
@@ -132,9 +134,7 @@ const someCode = untab`
 */
 ```
 
-#### Options:
-
-Signature:
+#### Options
 
 ```ts
 type Options = {
