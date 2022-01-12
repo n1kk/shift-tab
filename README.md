@@ -4,24 +4,22 @@ String template tag to manage indent in a code block, or any other multiline tex
 
 Features:
 
-- Can be used as template tag for in-place unindenting code blocks
-- Can be used as a normal function to dynamically process text in variables or pass to some pipeline as a processor
-- Configurable, behavior can be tuned via config parameter
+- Can be used as [template tag](#template-tag-signature) for in-place unindenting code blocks
+- Can be used as a [normal function](#string-processor-signature) to dynamically process text in variables or pass to some pipeline as a processor
+- Can be used as a [factory](#tag-factory-signature) to create [preconfigured](#configuration-options) tags or methods
 - Uniformal, same function to use as tag, method and a factory. Factory product can also be used as both, a tag or a method.
 
-### Table of Content
+### Usage:
 
-- [shift-tab](#shift-tab)
-  - [Import](#import)
-  - [Aliases](#all-exported-aliases)
-  - [Usage](#usage)
-    - [Whitespace](#whitespace)
-- [API and Configuration](#api-and-configuration)
-  - [Template tag signature](#template-tag-signature)
-  - [Tag factory signature](#tag-factory-signature)
-  - [Configuration signature](#configuration-options)
+Install:
 
-### Import:
+```bash
+npm install shift-tab
+yarn add shift-tab
+pnpm add shift-tab
+```
+
+Import:
 
 ```ts
 import shiftTab from "shift-tab";
@@ -42,10 +40,12 @@ export const $ttp = shiftTab({ pad: true, trim: true });
 export const $ttpm = shiftTab({ pad: true, trim: true, indent: "smallest" });
 ```
 
-### Usage:
+Use as a tag on a string template:
 
 <!-- prettier-ignore -->
 ```ts
+// some code
+    // some code
         // ....
         const someCode = $t`
             <h1>Title</h1>
