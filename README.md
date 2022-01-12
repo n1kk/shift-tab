@@ -19,7 +19,7 @@ Features:
 - [API and Configuration](#api-and-configuration)
   - [Template tag signature](#template-tag-signature)
   - [Tag factory signature](#tag-factory-signature)
-  - [Options](#options)
+  - [Configuration signature](#configuration-options)
 
 ### Import:
 
@@ -67,7 +67,7 @@ Content of `someCode` now is (empty line included):
 `;
 ```
 
-New lines are preserved by default, but can be [configured](#options).
+New lines are preserved by default, but can be [configured](#configuration-options).
 
 Calling it as a function and passing configurations object creates a new tag:
 
@@ -93,7 +93,9 @@ Content of `someCode` now is:
 </p>`;
 ```
 
-See the list of all [exported aliases](#all-exported-aliases).
+See the full list of [configuration options](#configuration-options).
+
+#### Options
 
 #### Whitespace
 
@@ -145,7 +147,7 @@ const someCode = untab`
 */
 ```
 
-#### Options
+#### Configuration options
 
 ```ts
 type Options = {
