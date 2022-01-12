@@ -29,7 +29,7 @@ import shiftTab from "shift-tab";
 import { $t } from "shift-tab";
 ```
 
-Some code at some random indentation level:
+See the list of all [exported aliases](#exported-aliases).
 
 ### Usage:
 
@@ -97,7 +97,7 @@ A tag to use with string templates.
 `shiftTab(strings: TemplateStringsArray, ...variables: any[]): string`
 
 ```ts
-const someCode = shiftTab`
+const someCode = $t`
     <h1>Title</h1>
 `;
 ```
@@ -114,7 +114,7 @@ const someCode = `
     <p>Content</p>
 `;
 
-const someUntabbedCode = shiftTab(someCode);
+const someUntabbedCode = $t(someCode);
 ```
 
 ### Tag factory signature
