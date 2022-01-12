@@ -1,12 +1,13 @@
 {
   "name": "shift-tab",
   "version": "1.0.0",
-  "description": "Removes leading space from string template literals",
+  "description": "Removes indent space from code blocks",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "repository": "github:n1kk/shift-tab",
   "homepage": "https://github.com/n1kk/shift-tab",
   "type": "module",
+  "sideEffects": false,
   "files": [
     "dist/index.js",
     "dist/index.d.ts"
