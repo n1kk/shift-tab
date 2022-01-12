@@ -27,7 +27,7 @@ import shiftTab from "shift-tab";
 import { $t } from "shift-tab";
 ```
 
-#### all exported aliases:
+#### all exported aliases ([see options docs here](#configuration-options)):
 
 ```ts
 export const $t = shiftTab;
