@@ -1,10 +1,10 @@
 type TemplateTag = (strings: TemplateStringsArray, ...variables: any[]) => string;
 type TemplateTagArgs = [strings: TemplateStringsArray, ...variables: any[]];
-type Options = Partial<{
-    indent: "first" | "minimum" | number;
-    pad: boolean | number;
-    trim: boolean;
-}>;
+type Options = {
+    indent?: "first" | "smallest" | number;
+    pad?: boolean | number;
+    trim?: boolean;
+};
 
 export function shiftTab(config: Options): TemplateTag;
 export function shiftTab(text: string): string;
@@ -32,7 +32,14 @@ export function shiftTab(
             return isEmptyLine(str, size) ? -1 : size;
         };
 
-        const lineIndents = lines.map(countIndent);
+        let lineIndents = lines.map(countIndent);
+
+        if (trim) {
+            const leading = count(lines, (line, i) => isEmptyLine(line, lineIndents[i]));
+            const trailing = count(lines, (line, i) => isEmptyLine(line, lineIndents[i]), true);
+            lines = lines.slice(leading, -trailing);
+            lineIndents = lineIndents.slice(leading, -trailing);
+        }
 
         let indentSize =
             indent === "first"
@@ -58,10 +65,6 @@ export function shiftTab(
 
         let untabedStr = lines.join("\n");
 
-        if (trim) {
-            untabedStr = untabedStr.trim();
-        }
-
         return untabedStr;
     }
 }
@@ -84,13 +87,13 @@ function count<T = any>(target: ArrayLike<T>, test: (value: T, i: number) => boo
 }
 
 export const $t = shiftTab;
-export const $tm = shiftTab({ indent: "minimum" });
+export const $tm = shiftTab({ indent: "smallest" });
 
 export const $tt = shiftTab({ trim: true });
-export const $ttm = shiftTab({ trim: true, indent: "minimum" });
+export const $ttm = shiftTab({ trim: true, indent: "smallest" });
 
 export const $tp = shiftTab({ pad: true });
-export const $tpm = shiftTab({ pad: true, indent: "minimum" });
+export const $tpm = shiftTab({ pad: true, indent: "smallest" });
 
 export const $ttp = shiftTab({ pad: true, trim: true });
-export const $ttpm = shiftTab({ pad: true, trim: true, indent: "minimum" });
+export const $ttpm = shiftTab({ pad: true, trim: true, indent: "smallest" });

@@ -109,7 +109,7 @@ test3
             });
 
             it("should unindent by minimum size", () => {
-                const untabbed = shiftTab({ indent: "minimum" })`
+                const untabbed = shiftTab({ indent: "smallest" })`
                 test
             test2
                 test3
@@ -214,6 +214,18 @@ test
 `;
             const expected = `test
     test2`;
+            expect(untabbed).toBe(expected);
+        });
+
+        it("should leave indent on non empty lines", () => {
+            const untabbed = shiftTab({ trim: true, indent: "smallest" })`
+            test
+        test2
+            test3
+`;
+            const expected = `    test
+test2
+    test3`;
             expect(untabbed).toBe(expected);
         });
     });
