@@ -1,6 +1,6 @@
 {
   "name": "shift-tab",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Removes indent space from code blocks",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
