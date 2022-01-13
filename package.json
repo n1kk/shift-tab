@@ -1,7 +1,7 @@
 {
   "name": "shift-tab",
-  "version": "1.1.0",
-  "description": "Removes indent space from code blocks",
+  "version": "1.1.1",
+  "description": "Removes indent space from multiline strings",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "repository": "github:n1kk/shift-tab",
@@ -28,14 +28,21 @@
   "author": "n1kk",
   "license": "MIT",
   "keywords": [
+    "identation",
     "unindent",
-    "unindent code",
-    "trim line",
-    "trim block",
-    "trim whitespace",
     "untab",
-    "untab code",
+    "trim",
+    "trim",
+    "whitespace",
     "shift tab",
-    "shift tab code"
+    "code block",
+    "multiline text",
+    "multiline string",
+    "template literals",
+    "template tags",
+    "esm",
+    "es module",
+    "typescript",
+    "ts"
   ]
 }
