@@ -233,7 +233,7 @@ test2
         describe("process", () => {
             it("should process result", () => {
                 const process = (input: string) => input.toUpperCase();
-                const untab = shiftTab({ trim: true, process: [process] });
+                const untab = shiftTab({ process: [process] });
 
                 const untabbed = untab`
         test
@@ -250,7 +250,7 @@ TEST
                 const process1 = (input: string) => input.toUpperCase();
                 const process2 = (input: string) => input.replace(/T/g, "_");
 
-                const untab = shiftTab({ trim: true, process: [process1, process2] });
+                const untab = shiftTab({ process: [process1, process2] });
 
                 const untabbed = untab`
         test
