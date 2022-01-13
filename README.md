@@ -2,12 +2,13 @@
 
 String template tag to manage indent in a text block and more. Use custom processors to create your own powerful loggers, stylers and formatters.
 
-Features:
+Usa cases:
 
 - As a [template tag](#template-tag-signature) for in-place unindenting and processing of text blocks
 - As a [normal function](#string-processor-signature) to dynamically process text in variables or pass to some pipeline as a processor
 - As a [factory](#tag-factory-signature) to create [preconfigured](#configuration-options) tags or methods
-- Uniformal, same function to use as tag, method and a factory. Factory product can also be used as both, a tag or a method.
+
+Uniformal, same function to use as tag, method and a factory. Factory product can also be used as both, a tag or a method.
 
 ### Usage:
 
@@ -26,6 +27,8 @@ import shiftTab from "shift-tab";
 // or it's shorter alias
 import { $t } from "shift-tab";
 ```
+
+See all exported aliases: 
 
 Use as a tag on a string template:
 
@@ -77,7 +80,9 @@ Now we have a neat little logger that will output unindented, trimmed multiline 
     }
 ```
 
-![Screen1](docs/scrn1.png)
+That will print a trimmed and colored message:
+
+![Screen1](screen1.png)
 
 See the full list of [configuration options](#configuration-options).
 
