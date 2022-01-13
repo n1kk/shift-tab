@@ -1,15 +1,18 @@
 type TemplateTag = (strings: TemplateStringsArray, ...variables: any[]) => string;
 type TemplateTagArgs = [strings: TemplateStringsArray, ...variables: any[]];
+
 type Options = {
-    indent?: "first" | "smallest" | number;
+    indent?: "first" | "smallest" | "all" | number;
     pad?: boolean | number;
     trim?: boolean;
+    process?: Processor[];
 };
+
+type Processor = (input: string) => string;
 
 export function shiftTab(config: Options): TemplateTag;
 export function shiftTab(text: string): string;
 export function shiftTab(strings: TemplateStringsArray, ...variables: any[]): string;
-///
 export function shiftTab(
     this: Options | void,
     ...args: [config: Options] | [text: string] | TemplateTagArgs
@@ -18,7 +21,7 @@ export function shiftTab(
         return shiftTab.bind(args[0]);
     } else {
         let str: string = typeof args[0] === "string" ? args[0] : buildTemplate(...(args as TemplateTagArgs));
-        const { indent = "first", pad, trim } = this ?? ({} as Options);
+        const { indent = "first", pad, trim, process } = this ?? ({} as Options);
         let lines = str.split("\n");
 
         const isEmptyLine = (str: string, indentSize: number) => str === "" || indentSize === str.length;
@@ -41,19 +44,23 @@ export function shiftTab(
             lineIndents = lineIndents.slice(leading, -trailing);
         }
 
-        let indentSize =
-            indent === "first"
-                ? lineIndents.find(_ => _ > -1) //
-                : Math.min(...lineIndents.filter(_ => _ !== -1));
+        if (indent === "all") {
+            lines = lines.map((line, i) => line.substring(lineIndents[i]));
+        } else {
+            let indentSize =
+                indent === "first"
+                    ? lineIndents.find(_ => _ > -1) //
+                    : Math.min(...lineIndents.filter(_ => _ !== -1));
 
-        if (indentSize !== undefined && indentSize > 0) {
-            const size = indentSize;
-            lines = lines.map((line, i) => line.substring(Math.min(size, lineIndents[i])));
-        }
+            if (indentSize !== undefined && indentSize > 0) {
+                const size = indentSize;
+                lines = lines.map((line, i) => line.substring(Math.min(size, lineIndents[i])));
+            }
 
-        if (typeof indent === "number") {
-            const pad = wsChar.repeat(indent);
-            lines = lines.map(line => pad + line);
+            if (typeof indent === "number") {
+                const pad = wsChar.repeat(indent);
+                lines = lines.map(line => pad + line);
+            }
         }
 
         if (pad || typeof pad === "number") {
@@ -63,9 +70,16 @@ export function shiftTab(
             lines = lines.map(line => line.trimEnd());
         }
 
-        let untabedStr = lines.join("\n");
+        let result = lines.join("\n");
 
-        return untabedStr;
+        if (process) {
+            result = process.reduce((acc, processor) => {
+                const processed = processor(acc);
+                return typeof processed === "string" ? processed : acc;
+            }, result);
+        }
+
+        return result;
     }
 }
 
@@ -84,6 +98,14 @@ function count<T = any>(target: ArrayLike<T>, test: (value: T, i: number) => boo
         if (!test(element, i)) return i;
     }
     return target.length;
+}
+
+export function untag(tag: TemplateTag): Processor {
+    return (input: string) => {
+        const templateStrings = [input] as unknown as TemplateStringsArray;
+        (templateStrings as any).raw = templateStrings;
+        return tag(templateStrings);
+    };
 }
 
 export const $t = shiftTab;

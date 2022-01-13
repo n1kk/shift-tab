@@ -1,4 +1,5 @@
-import { shiftTab } from "./index";
+import { shiftTab, untag } from "./index";
+import chalkTemplate from "chalk-template";
 
 describe("shift-tab", () => {
     it("should remove indent", () => {
@@ -122,16 +123,16 @@ test2
                 expect(untabbed).toBe(expected);
             });
 
-            it("should unindent to a number", () => {
-                const untabbed = shiftTab({ indent: 4 })`
+            it("should unindent all", () => {
+                const untabbed = shiftTab({ indent: "all" })`
             test
                 test2
                 test3
 `;
                 const expected = `
-    test
-        test2
-        test3
+test
+test2
+test3
 `;
                 expect(untabbed).toBe(expected);
             });
@@ -204,29 +205,80 @@ test
                 expect(untabbed).toBe(expected);
             });
         });
-    });
 
-    describe("trimEmpty", () => {
-        it("should trim new lines", () => {
-            const untabbed = shiftTab({ trim: true })`
+        describe("trimEmpty", () => {
+            it("should trim new lines", () => {
+                const untabbed = shiftTab({ trim: true })`
     test
         test2
 `;
-            const expected = `test
+                const expected = `test
     test2`;
-            expect(untabbed).toBe(expected);
-        });
+                expect(untabbed).toBe(expected);
+            });
 
-        it("should leave indent on non empty lines", () => {
-            const untabbed = shiftTab({ trim: true, indent: "smallest" })`
+            it("should leave indent on non empty lines", () => {
+                const untabbed = shiftTab({ trim: true, indent: "smallest" })`
             test
         test2
             test3
 `;
-            const expected = `    test
+                const expected = `    test
 test2
     test3`;
-            expect(untabbed).toBe(expected);
+                expect(untabbed).toBe(expected);
+            });
+        });
+
+        describe("process", () => {
+            it("should process result", () => {
+                const process = (input: string) => input.toUpperCase();
+                const untab = shiftTab({ trim: true, process: [process] });
+
+                const untabbed = untab`
+        test
+            test2
+`;
+                const expected = `
+TEST
+    TEST2
+`;
+                expect(untabbed).toBe(expected);
+            });
+
+            it("should process with several in order", () => {
+                const process1 = (input: string) => input.toUpperCase();
+                const process2 = (input: string) => input.replace(/T/g, "_");
+
+                const untab = shiftTab({ trim: true, process: [process1, process2] });
+
+                const untabbed = untab`
+        test
+            test2
+`;
+                const expected = `
+_ES_
+    _ES_2
+`;
+                expect(untabbed).toBe(expected);
+            });
+
+            it("should should ignore processor output if it returns not string", () => {
+                const colorize = untag(chalkTemplate);
+                const log = console.log as (input: string) => string;
+
+                const untab = shiftTab({ process: [colorize, log] });
+
+                const untabbed = untab`
+        {red test}
+            {blue test2}
+`;
+                const expected = `
+[31mtest[39m
+    [34mtest2[39m
+`;
+                expect(untabbed).toBe(expected);
+            });
         });
     });
 

@@ -5,7 +5,7 @@ module.exports = {
     moduleNameMapper: {
         "^(\\.{1,2}/.*)\\.js$": "$1",
     },
-    transformIgnorePatterns: ["/node_modules/"],
+    transformIgnorePatterns: ["/node_modules/(?!chalk-template)/"],
     transform: {
         "^.+\\.(js|mjs)$": ["ts-jest"],
         "\\.ts$": ["ts-jest"],

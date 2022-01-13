@@ -14,13 +14,16 @@
   ],
   "scripts": {
     "build": "pnpm tsc -b ./tsconfig.json",
-    "test": "pnpm jest"
+    "test": "pnpm jest",
+    "docs": "typedoc ./index.ts"
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",
+    "chalk-template": "^0.2.0",
     "jest": "^27.4.7",
     "prettier": "^2.5.1",
     "ts-jest": "^27.1.2",
+    "typedoc": "^0.22.10",
     "typescript": "^4.5.4"
   },
   "author": "n1kk",
