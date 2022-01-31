@@ -9,7 +9,9 @@
   "type": "module",
   "sideEffects": false,
   "files": [
-    "dist/**/*"
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "dist/**/*.map"
   ],
   "scripts": {
     "build": "rimraf dist && pnpm tsc -b ./tsconfig.json",
