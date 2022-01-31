@@ -23,8 +23,10 @@ describe("shift-tab", () => {
     it("should work multiline", () => {
         const untabbed = shiftTab`            test
             test2`;
-        const expected = `test
-test2`;
+        const expected = multiline([
+            "test", //
+            "test2",
+        ]);
         expect(untabbed).toBe(expected);
     });
 
@@ -33,12 +35,12 @@ test2`;
             test
 
             test2
-`;
-        const expected = `
-test
-
-test2
-`;
+        `;
+        const expected = multiline([
+            "test", //
+            "",
+            "test2",
+        ]);
         expect(untabbed).toBe(expected);
     });
 
@@ -47,12 +49,12 @@ test2
             test
             
             test2
-`;
-        const expected = `
-test
-
-test2
-`;
+        `;
+        const expected = multiline([
+            "test", //
+            "",
+            "test2",
+        ]);
         expect(untabbed).toBe(expected);
     });
 
@@ -60,11 +62,11 @@ test2
         const untabbed = shiftTab`
             test
                 test2
-`;
-        const expected = `
-test
-    test2
-`;
+        `;
+        const expected = multiline([
+            "test", //
+            "    test2",
+        ]);
         expect(untabbed).toBe(expected);
     });
 
@@ -73,22 +75,22 @@ test
 \t\t\ttest
 \t\t\t\ttest2
 `;
-        const expected = `
-test
-\ttest2
-`;
+        const expected = multiline([
+            "test", //
+            "\ttest2",
+        ]);
         expect(untabbed).toBe(expected);
     });
     describe("should pick first encountered indent char", () => {
         it("space", () => {
             const untabbed = shiftTab`
-    \ttest
-      \t\ttest2
-`;
-            const expected = `
-\ttest
-  \t\ttest2
-`;
+            \ttest
+              \t\ttest2
+            `;
+            const expected = multiline([
+                "\ttest", //
+                "  \t\ttest2",
+            ]);
             expect(untabbed).toBe(expected);
         });
 
@@ -97,10 +99,10 @@ test
 \t  test
 \t\ttest2
 `;
-            const expected = `
-  test
-\ttest2
-`;
+            const expected = multiline([
+                "  test", //
+                "\ttest2",
+            ]);
             expect(untabbed).toBe(expected);
         });
     });
@@ -109,58 +111,58 @@ test
         describe("indent", () => {
             it("should unindent by first indentation", () => {
                 const untabbed = shiftTab({ indent: "first" })`
-                test
-            test2
-                test3
-`;
-                const expected = `
-test
-test2
-test3
-`;
+                        test
+                    test2
+                        test3
+                `;
+                const expected = multiline([
+                    "test", //
+                    "test2",
+                    "test3",
+                ]);
                 expect(untabbed).toBe(expected);
             });
 
             it("should unindent by minimum size", () => {
                 const untabbed = shiftTab({ indent: "smallest" })`
-                test
-            test2
-                test3
-`;
-                const expected = `
-    test
-test2
-    test3
-`;
+                        test
+                    test2
+                        test3
+                `;
+                const expected = multiline([
+                    "    test", //
+                    "test2",
+                    "    test3",
+                ]);
                 expect(untabbed).toBe(expected);
             });
 
             it("should unindent all", () => {
                 const untabbed = shiftTab({ indent: "all" })`
-            test
-                test2
-                test3
-`;
-                const expected = `
-test
-test2
-test3
-`;
+                    test
+                        test2
+                        test3
+                `;
+                const expected = multiline([
+                    "test", //
+                    "test2",
+                    "test3",
+                ]);
                 expect(untabbed).toBe(expected);
             });
 
             describe("should unindent to a number by minimum indent line", () => {
                 it("spaces", () => {
                     const untabbed = shiftTab({ indent: 4 })`
-                test
-            test2
-                test3
-`;
-                    const expected = `
-        test
-    test2
-        test3
-`;
+                            test
+                        test2
+                            test3
+                    `;
+                    const expected = multiline([
+                        "        test", //
+                        "    test2",
+                        "        test3",
+                    ]);
                     expect(untabbed).toBe(expected);
                 });
 
@@ -170,11 +172,11 @@ test3
 \t\t\t\t\ttest2
 \t\t\t\t\t\ttest3
 `;
-                    const expected = `
-\t\t\ttest
-\t\ttest2
-\t\t\ttest3
-`;
+                    const expected = multiline([
+                        "\t\t\ttest", //
+                        "\t\ttest2",
+                        "\t\t\ttest3",
+                    ]);
                     expect(untabbed).toBe(expected);
                 });
             });
@@ -183,44 +185,45 @@ test3
         describe("linesWs", () => {
             it("should trim ws by default", () => {
                 const untabbed = shiftTab`
-    test      
-        test2    
-`;
-                const expected = `
-test
-    test2
-`;
+                    test      
+                        test2    
+                `;
+                const expected = multiline([
+                    "test", //
+                    "    test2",
+                ]);
                 expect(untabbed).toBe(expected);
             });
 
             it("should pad ws to max line size", () => {
                 const untabbed = shiftTab({ pad: true })`
-    test
-        test2
-`;
-                const expected = `         
-test     
-    test2
-         `;
+                    test
+                        test2
+                `;
+                const expected = multiline([
+                    "test     ", //
+                    "    test2",
+                ]);
+
                 expect(untabbed).toBe(expected);
             });
 
             it("should pad ws to a number", () => {
                 const untabbed = shiftTab({ pad: 20 })`
-    test
-        test2
-`;
-                const expected = `                    
-test                
-    test2           
-                    `;
+                    test
+                        test2
+                `;
+                const expected = multiline([
+                    "test                ", //
+                    "    test2           ",
+                ]);
                 expect(untabbed).toBe(expected);
             });
         });
 
         describe("trimEmpty", () => {
-            it("should trim new lines", () => {
-                const untabbed = shiftTab({ trim: true })`
+            it("should trim wrapping lines of the template", () => {
+                const untabbed = shiftTab({ trim: "wrap" })`
                     test
                         test2
                 `;
@@ -231,15 +234,21 @@ test
                 expect(untabbed).toBe(expected);
             });
 
-            it("should leave indent on non empty lines", () => {
-                const untabbed = shiftTab({ trim: true, indent: "smallest" })`
-            test
-        test2
-            test3
-`;
-                const expected = `    test
-test2
-    test3`;
+            it("should trim all empty leading and trailing lines", () => {
+                const untabbed = shiftTab({ trim: "lines", indent: "smallest" })`
+                            
+                            test
+                        test2
+                            test3
+                            
+                            
+                `;
+                const expected = multiline([
+                    "    test", //
+                    "test2",
+                    "    test3",
+                ]);
+
                 expect(untabbed).toBe(expected);
             });
         });
@@ -250,30 +259,30 @@ test2
                 const untab = shiftTab({ process: [process] });
 
                 const untabbed = untab`
-        test
-            test2
-`;
-                const expected = `
-TEST
-    TEST2
-`;
+                    test
+                        test2
+                `;
+                const expected = multiline([
+                    "TEST", //
+                    "    TEST2",
+                ]);
                 expect(untabbed).toBe(expected);
             });
 
             it("should process with several in order", () => {
                 const process1 = (input: string) => input.toUpperCase();
-                const process2 = (input: string) => input.replace(/T/g, "_");
+                const process2 = (input: string) => input.replace(/TEST/gi, "----");
 
                 const untab = shiftTab({ process: [process1, process2] });
 
                 const untabbed = untab`
-        test
-            test2
-`;
-                const expected = `
-_ES_
-    _ES_2
-`;
+                    testline
+                        testline2
+                `;
+                const expected = multiline([
+                    "----LINE", //
+                    "    ----LINE2",
+                ]);
                 expect(untabbed).toBe(expected);
             });
 
@@ -284,13 +293,13 @@ _ES_
                 const untab = shiftTab({ process: [colorize, log] });
 
                 const untabbed = untab`
-        {red test}
-            {blue test2}
-`;
-                const expected = `
-[31mtest[39m
-    [34mtest2[39m
-`;
+                    {red test}
+                        {blue test2}
+                `;
+                const expected = multiline([
+                    "[31mtest[39m", //
+                    "    [34mtest2[39m",
+                ]);
                 expect(untabbed).toBe(expected);
             });
         });
@@ -299,30 +308,30 @@ _ES_
     it("should work with template with variables", () => {
         let undef = undefined;
         const untabbed = shiftTab`
-    ${"test"}
-        ${"test2"}
-        ${undef}
-`;
-        const expected = `
-${"test"}
-    ${"test2"}
-    ${undef}
-`;
+            ${"test"}
+                ${"test2"}
+                ${undef}
+        `;
+        const expected = multiline([
+            `${"test"}`, //
+            `    ${"test2"}`,
+            `    ${undef}`,
+        ]);
         expect(untabbed).toBe(expected);
     });
 
     it("should work as a method", () => {
         let undef = undefined;
         const untabbed = shiftTab(`
-    ${"test"}
-        ${"test2"}
-        ${undef}
-`);
-        const expected = `
-${"test"}
-    ${"test2"}
-    ${undef}
-`;
+            ${"test"}
+                ${"test2"}
+                ${undef}
+        `);
+        const expected = multiline([
+            `${"test"}`, //
+            `    ${"test2"}`,
+            `    ${undef}`,
+        ]);
         expect(untabbed).toBe(expected);
     });
 });

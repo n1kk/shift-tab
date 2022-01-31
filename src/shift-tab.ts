@@ -6,7 +6,7 @@ export type TemplateTagArgs = [strings: TemplateStringsArray, ...variables: any[
 type Options = {
     indent?: "first" | "smallest" | "all" | number;
     pad?: boolean | number;
-    trim?: boolean;
+    trim?: "wrap" | "lines" | "none";
     process?: Processor[];
 };
 
@@ -23,7 +23,7 @@ export function shiftTab(
         return shiftTab.bind(args[0]);
     } else {
         let str: string = typeof args[0] === "string" ? args[0] : buildTemplate(...(args as TemplateTagArgs));
-        const { indent = "first", pad, trim, process } = this ?? ({} as Options);
+        const { indent = "first", pad, trim = "wrap", process } = this ?? ({} as Options);
         let lines = str.split("\n");
 
         let wsChar = "";
@@ -39,11 +39,20 @@ export function shiftTab(
 
         let lineIndents = lines.map(countIndent);
 
-        if (trim) {
+        if (trim === "lines") {
             const leading = count(lines, isEmptyOrWhitespace);
             const trailing = count(lines, isEmptyOrWhitespace, true);
             lines = lines.slice(leading, -trailing || undefined);
             lineIndents = lineIndents.slice(leading, -trailing);
+        } else if (trim === "wrap") {
+            if (lines[0] === "") {
+                lines.shift();
+                lineIndents.shift();
+            }
+            if (isEmptyOrWhitespace(lines[lines.length - 1])) {
+                lines.pop();
+                lineIndents.pop();
+            }
         }
 
         if (indent === "all") {

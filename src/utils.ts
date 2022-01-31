@@ -25,8 +25,8 @@ export function untag(tag: TemplateTag): Processor {
     };
 }
 
-export function isEmptyOrWhitespace(str: string) {
-    return str === "" || /^\s+$/.test(str);
+export function isEmptyOrWhitespace(str: string | undefined) {
+    return str === "" || (typeof str === "string" && /^\s+$/.test(str));
 }
 
 export function multiline(...lines: string[] | [string[]]): string {
