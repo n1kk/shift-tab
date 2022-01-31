@@ -1,5 +1,7 @@
-type TemplateTag = (strings: TemplateStringsArray, ...variables: any[]) => string;
-type TemplateTagArgs = [strings: TemplateStringsArray, ...variables: any[]];
+import { buildTemplate, count, isEmptyOrWhitespace } from "./utils";
+
+export type TemplateTag = (strings: TemplateStringsArray, ...variables: any[]) => string;
+export type TemplateTagArgs = [strings: TemplateStringsArray, ...variables: any[]];
 
 type Options = {
     indent?: "first" | "smallest" | "all" | number;
@@ -8,7 +10,7 @@ type Options = {
     process?: Processor[];
 };
 
-type Processor = (input: string) => string;
+export type Processor = (input: string) => string;
 
 export function shiftTab(config: Options): TemplateTag;
 export function shiftTab(text: string): string;
@@ -24,23 +26,23 @@ export function shiftTab(
         const { indent = "first", pad, trim, process } = this ?? ({} as Options);
         let lines = str.split("\n");
 
-        const isEmptyLine = (str: string, indentSize: number) => str === "" || indentSize === str.length;
-
         let wsChar = "";
         const countIndent = (str: string) => {
             const size = count(str, ch => {
-                if (!wsChar && (ch === " " || ch === "\t")) wsChar = ch;
+                if (!wsChar && (ch === " " || ch === "\t")) {
+                    wsChar = ch;
+                }
                 return ch === wsChar;
             });
-            return isEmptyLine(str, size) ? -1 : size;
+            return isEmptyOrWhitespace(str) ? -1 : size;
         };
 
         let lineIndents = lines.map(countIndent);
 
         if (trim) {
-            const leading = count(lines, (line, i) => isEmptyLine(line, lineIndents[i]));
-            const trailing = count(lines, (line, i) => isEmptyLine(line, lineIndents[i]), true);
-            lines = lines.slice(leading, -trailing);
+            const leading = count(lines, isEmptyOrWhitespace);
+            const trailing = count(lines, isEmptyOrWhitespace, true);
+            lines = lines.slice(leading, -trailing || undefined);
             lineIndents = lineIndents.slice(leading, -trailing);
         }
 
@@ -82,40 +84,3 @@ export function shiftTab(
         return result;
     }
 }
-
-function buildTemplate(strings: TemplateStringsArray, ...variables: any[]): string {
-    return strings
-        .map((str, i) => {
-            const variable = variables.length > i ? variables?.[i] : "";
-            return str + variable;
-        })
-        .join("");
-}
-
-function count<T = any>(target: ArrayLike<T>, test: (value: T, i: number) => boolean, reverse = false): number {
-    for (let i = 0; i < target.length; i++) {
-        const element = target[reverse ? target.length - (i + 1) : i];
-        if (!test(element, i)) return i;
-    }
-    return target.length;
-}
-
-export function untag(tag: TemplateTag): Processor {
-    return (input: string) => {
-        const templateStrings = [input] as unknown as TemplateStringsArray;
-        (templateStrings as any).raw = templateStrings;
-        return tag(templateStrings);
-    };
-}
-
-export const $t = shiftTab;
-export const $tm = shiftTab({ indent: "smallest" });
-
-export const $tt = shiftTab({ trim: true });
-export const $ttm = shiftTab({ trim: true, indent: "smallest" });
-
-export const $tp = shiftTab({ pad: true });
-export const $tpm = shiftTab({ pad: true, indent: "smallest" });
-
-export const $ttp = shiftTab({ pad: true, trim: true });
-export const $ttpm = shiftTab({ pad: true, trim: true, indent: "smallest" });

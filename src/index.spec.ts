@@ -1,5 +1,17 @@
-import { shiftTab, untag } from "./index";
 import chalkTemplate from "chalk-template";
+import { multiline, untag } from "./utils";
+import { shiftTab } from "./shift-tab";
+
+describe("multiline", () => {
+    it("should join lines", () => {
+        const text = multiline("line1", "line2");
+        expect(text).toBe("line1\nline2");
+    });
+    it("should join array of lines", () => {
+        const text = multiline(["line1", "line2"]);
+        expect(text).toBe("line1\nline2");
+    });
+});
 
 describe("shift-tab", () => {
     it("should remove indent", () => {
@@ -209,11 +221,13 @@ test
         describe("trimEmpty", () => {
             it("should trim new lines", () => {
                 const untabbed = shiftTab({ trim: true })`
-    test
-        test2
-`;
-                const expected = `test
-    test2`;
+                    test
+                        test2
+                `;
+                const expected = multiline(
+                    "test", //
+                    "    test2",
+                );
                 expect(untabbed).toBe(expected);
             });
 
