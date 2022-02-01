@@ -11,7 +11,6 @@
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",
-    "dist/**/*.map"
   ],
   "scripts": {
     "build": "rimraf dist && pnpm tsc -b ./tsconfig.json",
