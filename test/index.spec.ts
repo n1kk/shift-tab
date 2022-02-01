@@ -1,6 +1,5 @@
+import { multiline, shiftTab, untag } from "../src";
 import chalkTemplate from "chalk-template";
-import { multiline, untag } from "./utils";
-import { shiftTab } from "./shift-tab";
 
 describe("multiline", () => {
     it("should join lines", () => {
@@ -179,45 +178,6 @@ describe("shift-tab", () => {
                     ]);
                     expect(untabbed).toBe(expected);
                 });
-            });
-        });
-
-        describe("linesWs", () => {
-            it("should trim ws by default", () => {
-                const untabbed = shiftTab`
-                    test      
-                        test2    
-                `;
-                const expected = multiline([
-                    "test", //
-                    "    test2",
-                ]);
-                expect(untabbed).toBe(expected);
-            });
-
-            it("should pad ws to max line size", () => {
-                const untabbed = shiftTab({ pad: true })`
-                    test
-                        test2
-                `;
-                const expected = multiline([
-                    "test     ", //
-                    "    test2",
-                ]);
-
-                expect(untabbed).toBe(expected);
-            });
-
-            it("should pad ws to a number", () => {
-                const untabbed = shiftTab({ pad: 20 })`
-                    test
-                        test2
-                `;
-                const expected = multiline([
-                    "test                ", //
-                    "    test2           ",
-                ]);
-                expect(untabbed).toBe(expected);
             });
         });
 

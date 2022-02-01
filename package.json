@@ -15,7 +15,8 @@
   ],
   "scripts": {
     "build": "rimraf dist && pnpm tsc -b ./tsconfig.json",
-    "test": "pnpm jest"
+    "test": "pnpm jest",
+    "test-print": "node ./test/print.js"
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",

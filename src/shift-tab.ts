@@ -1,4 +1,4 @@
-import { buildTemplate, count, isEmptyOrWhitespace } from "./utils";
+import { buildTemplate, count, isEmptyOrWhitespace } from "./utils.js";
 
 export type TemplateTag = (strings: TemplateStringsArray, ...variables: any[]) => string;
 export type TemplateTagArgs = [strings: TemplateStringsArray, ...variables: any[]];
@@ -10,7 +10,7 @@ type Options = {
     process?: Processor[];
 };
 
-export type Processor = (input: string) => string;
+export type Processor = (input: string) => any;
 
 export function shiftTab(config: Options): TemplateTag;
 export function shiftTab(text: string): string;
@@ -28,13 +28,16 @@ export function shiftTab(
 
         let wsChar = "";
         const countIndent = (str: string) => {
+            if (str === "") {
+                return -1;
+            }
             const size = count(str, ch => {
                 if (!wsChar && (ch === " " || ch === "\t")) {
                     wsChar = ch;
                 }
                 return ch === wsChar;
             });
-            return isEmptyOrWhitespace(str) ? -1 : size;
+            return size;
         };
 
         let lineIndents = lines.map(countIndent);
@@ -72,13 +75,6 @@ export function shiftTab(
                 const pad = wsChar.repeat(indent);
                 lines = lines.map(line => pad + line);
             }
-        }
-
-        if (pad || typeof pad === "number") {
-            const padSize = typeof pad === "number" ? pad : Math.max(...lines.map(line => line.length));
-            lines = lines.map(line => line.padEnd(padSize, " "));
-        } else {
-            lines = lines.map(line => line.trimEnd());
         }
 
         let result = lines.join("\n");

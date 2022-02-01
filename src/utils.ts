@@ -1,4 +1,4 @@
-import type { Processor, TemplateTag } from "./shift-tab";
+import type { Processor, TemplateTag } from "./shift-tab.js";
 
 export function buildTemplate(strings: TemplateStringsArray, ...variables: any[]): string {
     return strings
