@@ -10,7 +10,7 @@
   "sideEffects": false,
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts",
+    "dist/**/*.d.ts"
   ],
   "scripts": {
     "build": "rimraf dist && pnpm tsc -b ./tsconfig.json",
